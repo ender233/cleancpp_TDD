@@ -11,5 +11,5 @@ enable_testing() # ??
 include_directories(${gtest_source_dir}/include)
 
 # testsuite
-add_executable(clean_cpp main.cpp)
+add_executable(clean_cpp main.cpp roman_number.cpp)
 target_link_libraries(clean_cpp gtest gtest_main)

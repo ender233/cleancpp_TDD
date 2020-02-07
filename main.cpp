@@ -1,31 +1,6 @@
-#include <iostream>
 #include <gtest/gtest.h>
+#include "roman_number.hpp"
 using namespace std;
-
-/* 规则:
- * 1 -> I
- * 5 -> V
- * 10 -> X
- * 50 -> L
- * 100 -> C
- * 500 -> D
- * 1000 -> M
- */
-string convertArabicNumberToRomanNumeral(unsigned int arabicNumber) {
-    string romanNumeral;
-    while(arabicNumber >= 100) {
-        romanNumeral += "C";
-        arabicNumber -= 100;
-    }
-    while(arabicNumber >= 10) {
-        romanNumeral += "X";
-        arabicNumber -= 10;
-    }
-    while(arabicNumber-- > 0) {
-        romanNumeral += "I";
-    }
-    return romanNumeral;
-}
 
 // 支持assertThat(3).isConvertedToRomanNumeral("XXXII")语法
 class RomanNumberalAssert {
@@ -39,7 +14,6 @@ public:
 private:
     const unsigned int number_;
 };
-// RomanNumberalAssert help function
 RomanNumberalAssert assertThat(const unsigned int arabicNumber) {
     return RomanNumberalAssert(arabicNumber);
 }
