@@ -2,19 +2,6 @@
 #include <gtest/gtest.h>
 using namespace std;
 
-// test for gtest
-class Test : public ::testing::Test {
-protected:
-    Test() = default;
-    virtual ~Test() = default;
-    virtual  void SetUp() {}
-    virtual  void TearDown() {}
-};
-
-TEST_F(Test, test2) {
-    EXPECT_EQ(1, 1);
-}
-
 /* 规则:
  * 1 -> I
  * 5 -> V
@@ -23,15 +10,50 @@ TEST_F(Test, test2) {
  * 100 -> C
  * 500 -> D
  * 1000 -> M
- *
  */
-string convertArabicNumberToRomanNumeral(const unsigned int arabicNumber) {
-    return "I";
+string convertArabicNumberToRomanNumeral(unsigned int arabicNumber) {
+    string romanNumeral;
+    while(arabicNumber >= 100) {
+        romanNumeral += "C";
+        arabicNumber -= 100;
+    }
+    while(arabicNumber >= 10) {
+        romanNumeral += "X";
+        arabicNumber -= 10;
+    }
+    while(arabicNumber-- > 0) {
+        romanNumeral += "I";
+    }
+    return romanNumeral;
 }
 
+// 支持assertThat(3).isConvertedToRomanNumeral("XXXII")语法
+class RomanNumberalAssert {
+public:
+    RomanNumberalAssert() = delete;
+    RomanNumberalAssert(const unsigned int number) : number_(number) {}
+    void isConvertedToRomanNumeral(const std::string &expectedRomanNumeral) const {
+        EXPECT_EQ(expectedRomanNumeral, convertArabicNumberToRomanNumeral(number_));
+    }
 
-TEST(ArabicToRomanNumeralsConverterTestCase, 1_isConvertedTo_I) {
-    EXPECT_EQ("I", convertArabicNumberToRomanNumeral(1));
+private:
+    const unsigned int number_;
+};
+// RomanNumberalAssert help function
+RomanNumberalAssert assertThat(const unsigned int arabicNumber) {
+    return RomanNumberalAssert(arabicNumber);
 }
 
+TEST(ArabicToRomanNumeralsConverterTestCase, conversionOfArabicNumbersToRomanNumerls_Works) {
+    assertThat(1).isConvertedToRomanNumeral("I");
+    assertThat(2).isConvertedToRomanNumeral("II");
+    assertThat(3).isConvertedToRomanNumeral("III");
+    assertThat(10).isConvertedToRomanNumeral("X");
+    assertThat(20).isConvertedToRomanNumeral("XX");
+    assertThat(30).isConvertedToRomanNumeral("XXX");
+    assertThat(33).isConvertedToRomanNumeral("XXXIII");
+    assertThat(100).isConvertedToRomanNumeral("C");
+    assertThat(200).isConvertedToRomanNumeral("CC");
+    assertThat(300).isConvertedToRomanNumeral("CCC");
+}
 
